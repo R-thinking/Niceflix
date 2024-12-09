@@ -1,9 +1,5 @@
 const Home = () => {
-  return (
-    <div>
-      <h1>Home</h1>
-    </div>
-  );
+  return <div style={{ height: "200vh" }}>Home</div>;
 };
 
 export default Home;
