@@ -17,14 +17,15 @@ const Navigation = styled(motion.nav)`
   width: 100%;
   top: 0;
   color: #c6c6c6;
-  height: 70px;
+  height: 68px;
   font-size: 14px;
   padding: 0 20px;
+  z-index: 10;
 `;
 
 const navigationVariants = {
   top: { backgroundColor: "rgba(0, 0, 0, 0)" },
-  scrolling: { backgroundColor: "rgba(0, 0, 0, 0.875)" },
+  scrolling: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
 };
 
 const Column = styled.div`
@@ -82,7 +83,7 @@ const Header = () => {
       initial="top"
     >
       <Column>
-        <NetflixFullLogo logowidth="120px" />
+        <NetflixFullLogo logowidth="93px" />
         <Items>
           {buttons.map((button, index) => (
             <Item
@@ -92,6 +93,7 @@ const Header = () => {
                   ? {
                       scale: 1.1,
                       color: "#eeeeee",
+                      fontWeight: 500,
                     }
                   : {}
               }

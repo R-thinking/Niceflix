@@ -62,14 +62,26 @@ input {
   box-sizing: border-box;
 }
 body {
-  font-family: "Source Code Pro", sans-serif;
- 
+  font-weight:300;
+  font-family: "Source Sans Pro", sans-serif;
+  line-height:1.2;
+  color:${(props) => props.theme.bodyColor};
+  background-color: ${(props) => props.theme.bodyBackgroundColor};
+  height:200vh;
 }
 
 a {
   text-decoration:none;
   color:inherit
 }
+
+button {
+  outline:none;
+  border:none;
+  box-shadow:none;
+  cursor:pointer;
+}
+
 `;
 
 function App() {
