@@ -54,6 +54,7 @@ const SearchBox = () => {
     <Box>
       <Wrapper
         onClick={openSearch}
+        initial={{ x: 0 }}
         animate={{ x: isClicked ? -220 : 0 }}
         transition={{ ease: "linear" }}
       >
@@ -62,6 +63,7 @@ const SearchBox = () => {
       <Input
         ref={inputRef}
         onBlur={closeSearch}
+        initial={{ scaleX: 0 }}
         animate={{ scaleX: isClicked ? 1 : 0 }}
         /* useAnimation
          initial={{ scaleX: 0 }}

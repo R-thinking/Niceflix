@@ -10,6 +10,8 @@ import { getDuration } from "../api/youtube";
 import PlayIcon from "../asets/PlayIcon";
 import InfoIcon from "../asets/InfoIcon";
 import StopIcon from "../asets/StopIcon";
+import { gloabalStore } from "../stores";
+import Slider from "./Slider";
 
 const Banner = styled(motion.div)<{ backdroppath: string }>`
   height: 100vh;
@@ -22,7 +24,6 @@ const Banner = styled(motion.div)<{ backdroppath: string }>`
     url(${(props) => props.backdroppath});
   background-size: cover;
 `;
-const leftCommonPadding = "25px";
 
 const MovingListener = styled(motion.div)`
   position: absolute;
@@ -31,14 +32,23 @@ const MovingListener = styled(motion.div)`
   height: 100vh;
 `;
 
-const DescriptionLayer = styled(motion.div)`
+interface IDescriptionLayer {
+  $leftCommonPadding: number;
+  $slideItemHeight: number;
+}
+const DescriptionLayer = styled(motion.div)<IDescriptionLayer>`
   position: absolute;
-  left: ${leftCommonPadding};
-  bottom: 5%;
+  left: ${(props) => `${props.$leftCommonPadding}px`};
+  bottom: ${(props) => `${props.$slideItemHeight}px`};
   display: flex;
   flex-direction: column;
   gap: 5px;
   z-index: 2;
+  margin-bottom: 100px;
+  &.playingVideo {
+    bottom: 20px;
+    margin-bottom: 0;
+  }
 `;
 
 const Title = styled.p`
@@ -51,6 +61,19 @@ const Overview = styled.p`
   font-size: 17px;
   width: 40%;
   margin-bottom: 15px;
+`;
+
+const NowPlaying = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+`;
+
+const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
+  font-size: 18px;
+  font-weight: 600;
+  padding-left: ${(props) => `${props.$leftCommonPadding}px`};
+  margin-bottom: 5px;
 `;
 
 const Controller = styled(motion.div)`
@@ -109,10 +132,11 @@ interface IBannerProps {
   playerHeight: string;
 }
 
-const BannerPlayer: React.FC<{ movie: IMovie; bannerProps?: IBannerProps }> = ({
-  movie,
-  bannerProps,
-}) => {
+const BannerPlayer: React.FC<{
+  movie: IMovie;
+  bannerProps?: IBannerProps;
+  slideItems: IMovie[];
+}> = ({ movie, bannerProps, slideItems }) => {
   const {
     data: trailerData,
     error,
@@ -132,6 +156,9 @@ const BannerPlayer: React.FC<{ movie: IMovie; bannerProps?: IBannerProps }> = ({
   const { data: detailData } = useQuery(["details"], () =>
     getDetails(movie.id)
   );
+
+  const leftCommonPadding = gloabalStore((state) => state.getCommonPadding());
+  const slideItemHeight = gloabalStore((state) => state.getItemHeight());
 
   const youtubeRef = useRef<YouTube>(null);
   const playerRef = useRef<HTMLDivElement>(null);
@@ -160,7 +187,7 @@ const BannerPlayer: React.FC<{ movie: IMovie; bannerProps?: IBannerProps }> = ({
     setTimeout(() => setIsMouseMoving(false), 500);
   };
 
-  const playInterval = 30000;
+  const playInterval = 300000000000000;
 
   const getPlayTimer = () => {
     const timer = setTimeout(async () => {
@@ -270,7 +297,11 @@ const BannerPlayer: React.FC<{ movie: IMovie; bannerProps?: IBannerProps }> = ({
         style={{ display: isReady ? "block" : "none" }}
         onMouseMove={renewIsMouseMoving}
       ></MovingListener>
-      <DescriptionLayer>
+      <DescriptionLayer
+        $leftCommonPadding={leftCommonPadding}
+        $slideItemHeight={slideItemHeight}
+        className={isReady ? "playingVideo" : ""}
+      >
         <Title style={{ display: isReady ? "none" : "block" }}>
           {movie.title}
         </Title>
@@ -299,6 +330,12 @@ const BannerPlayer: React.FC<{ movie: IMovie; bannerProps?: IBannerProps }> = ({
           </InformationButton>
         </Controller>
       </DescriptionLayer>
+      <NowPlaying style={{ display: isReady ? "none" : "block" }}>
+        <SliedeTitle $leftCommonPadding={leftCommonPadding}>
+          Now Playing
+        </SliedeTitle>
+        <Slider items={slideItems} />
+      </NowPlaying>
 
       <Player
         ref={playerRef}

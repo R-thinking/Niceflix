@@ -8,8 +8,9 @@ import {
 } from "framer-motion";
 import { Link, useRouteMatch } from "react-router-dom";
 import SearchBox from "./SearchBox";
+import { gloabalStore } from "../stores";
 
-const Navigation = styled(motion.nav)`
+const Navigation = styled(motion.nav)<{ $leftCommonPadding: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,7 +20,7 @@ const Navigation = styled(motion.nav)`
   color: #c6c6c6;
   height: 68px;
   font-size: 14px;
-  padding: 0 20px;
+  padding: 0 ${(props) => `${props.$leftCommonPadding}px`};
   z-index: 10;
 `;
 
@@ -57,6 +58,7 @@ const Item = styled(motion.li)`
 `; */
 
 const Header = () => {
+  const leftCommonPadding = gloabalStore((state) => state.getCommonPadding());
   const IsOnThisPage = (address: string) => useRouteMatch(address);
   const buttons = [
     { label: "Home", path: "/" },
@@ -78,6 +80,7 @@ const Header = () => {
 
   return (
     <Navigation
+      $leftCommonPadding={leftCommonPadding}
       variants={navigationVariants}
       animate={navigationAnimation}
       initial="top"
