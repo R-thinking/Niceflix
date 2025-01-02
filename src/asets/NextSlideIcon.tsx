@@ -5,7 +5,7 @@ interface INextSlideIconProps {
   $iconWidth: string;
 }
 
-const inactiveColor = "rgb(200, 200, 200)";
+const inactiveColor = "rgb(210, 210, 210)";
 const activeColor = "rgb(255, 255, 255)";
 const Svg = styled(motion.svg)<INextSlideIconProps>`
   width: ${(props) => props.$iconWidth};

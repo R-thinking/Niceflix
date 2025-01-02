@@ -1,3 +1,5 @@
-import { gloabalStore } from "./globalStore";
+import { globalStore } from "./globalStore";
+import { playerStore } from "./playerStore";
+import { sliderStore } from "./sliderStore";
 
-export { gloabalStore };
+export { globalStore, sliderStore, playerStore };

@@ -13,7 +13,7 @@ interface IGlabalState {
   getItemHeight: () => number;
 }
 
-export const gloabalStore = create<IGlabalState>()((set, get) => ({
+export const globalStore = create<IGlabalState>()((set, get) => ({
   goldenRatio: 1.61803398,
   offset: 6,
   itemGap: 10,

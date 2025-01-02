@@ -4,6 +4,9 @@ import { isAxiosError } from "axios";
 import styled from "styled-components";
 import { getMovieThumbnail } from "../api/youtube";
 import BannerPlayer from "../Components/BannerPlayer";
+import { useEffect, useState } from "react";
+import { playerStore } from "../stores";
+import PreviewPlayer from "../Components/PreviewPlayer";
 
 const Wrapper = styled.div`
   /* height: 200vh; */
@@ -23,10 +26,24 @@ const Home = () => {
     getNowPlaying
   );
   if (isError) {
-    if (isAxiosError(error)) console.error("failed", error.message);
+    if (isAxiosError(error)) {
+    }
   }
+  const removeLostItem = () => {
+    const realData = {
+      ...data,
+      results: data?.results?.filter((item) => item.backdrop_path !== null),
+    };
+    return realData;
+  };
+  const [movieItem, setMovieItem] = useState<any>(null);
+  useEffect(() => {
+    if (isLoading) return;
+    setMovieItem(removeLostItem());
+  }, [data]);
 
   const { data: thumbnailData } = useQuery(["thumbnail"], getMovieThumbnail);
+  const isVisible = playerStore((state) => state.isVisible);
 
   return (
     <Wrapper>
@@ -34,13 +51,14 @@ const Home = () => {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          {data ? (
+          {movieItem ? (
             <BannerPlayer
-              movie={data.results[0]}
+              movie={movieItem.results[0]}
               bannerProps={{ playerWidth: "100%", playerHeight: "100vh" }}
-              slideItems={data.results.slice(1)}
+              slideItems={movieItem.results.slice(1)}
             />
           ) : null}
+          {isVisible && <PreviewPlayer />}
         </>
       )}
     </Wrapper>

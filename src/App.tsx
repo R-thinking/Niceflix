@@ -68,6 +68,7 @@ body {
   color:${(props) => props.theme.bodyColor};
   background-color: ${(props) => props.theme.bodyBackgroundColor};
   height:200vh;
+  overflow-x: hidden;
 }
 
 a {

@@ -10,7 +10,7 @@ import { getDuration } from "../api/youtube";
 import PlayIcon from "../asets/PlayIcon";
 import InfoIcon from "../asets/InfoIcon";
 import StopIcon from "../asets/StopIcon";
-import { gloabalStore } from "../stores";
+import { globalStore } from "../stores";
 import Slider from "./Slider";
 
 const Banner = styled(motion.div)<{ backdroppath: string }>`
@@ -66,7 +66,7 @@ const Overview = styled.p`
 const NowPlaying = styled.div`
   width: 100%;
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
 `;
 
 const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
@@ -143,22 +143,24 @@ const BannerPlayer: React.FC<{
     isError,
   } = useQuery(["trailer"], () => getTrailers(movie.id));
   if (isError) {
-    if (isAxiosError(error)) console.error("failed", error.message);
+    if (isAxiosError(error)) {
+    }
   }
 
   const { data: durationData } = useQuery(
     ["duration", trailerData],
-    () => getDuration(trailerData?.results[1].key ?? ""),
+    () => getDuration(trailerData?.results[0].key ?? ""),
     { enabled: !!trailerData }
   );
-  const startTime = durationData && durationData > 30 ? durationData - 30 : 0;
 
   const { data: detailData } = useQuery(["details"], () =>
     getDetails(movie.id)
   );
 
-  const leftCommonPadding = gloabalStore((state) => state.getCommonPadding());
-  const slideItemHeight = gloabalStore((state) => state.getItemHeight());
+  const leftCommonPadding = globalStore((state) => state.getCommonPadding());
+  const slideItemHeight = globalStore((state) => state.getItemHeight());
+
+  const startTime = durationData && durationData > 30 ? durationData - 30 : 0;
 
   const youtubeRef = useRef<YouTube>(null);
   const playerRef = useRef<HTMLDivElement>(null);
@@ -169,7 +171,6 @@ const BannerPlayer: React.FC<{
   );
   useEffect(() => setPlayerHeight(window.innerHeight), [window.innerHeight]);
 
-  type Timer = ReturnType<typeof setTimeout> | null | number;
   const [playTimer, setPlayTimer] = useState<Timer>(null);
   const [backgroundTimer, setBackgroundTimer] = useState<Timer>(null);
   const [hideTimer, setHideTimer] = useState<Timer>(null);
@@ -187,7 +188,7 @@ const BannerPlayer: React.FC<{
     setTimeout(() => setIsMouseMoving(false), 500);
   };
 
-  const playInterval = 300000000000000;
+  const playInterval = 300000000; //30000
 
   const getPlayTimer = () => {
     const timer = setTimeout(async () => {
@@ -288,6 +289,18 @@ const BannerPlayer: React.FC<{
     hideController();
   };
 
+  const descriptionRef = useRef<HTMLDivElement | null>(null);
+  const onClickNowPlaying = () => {
+    if (descriptionRef.current instanceof HTMLDivElement) {
+      descriptionRef.current.style.zIndex = "0";
+    }
+  };
+  const onMouseLeaveFromNowPlaying = () => {
+    if (descriptionRef.current instanceof HTMLDivElement) {
+      descriptionRef.current.style.zIndex = "2";
+    }
+  };
+
   return (
     <Banner
       backdroppath={createImagePath(movie.backdrop_path ?? "")}
@@ -298,6 +311,7 @@ const BannerPlayer: React.FC<{
         onMouseMove={renewIsMouseMoving}
       ></MovingListener>
       <DescriptionLayer
+        ref={descriptionRef}
         $leftCommonPadding={leftCommonPadding}
         $slideItemHeight={slideItemHeight}
         className={isReady ? "playingVideo" : ""}
@@ -330,11 +344,15 @@ const BannerPlayer: React.FC<{
           </InformationButton>
         </Controller>
       </DescriptionLayer>
-      <NowPlaying style={{ display: isReady ? "none" : "block" }}>
+      <NowPlaying
+        onClick={onClickNowPlaying}
+        onMouseLeave={onMouseLeaveFromNowPlaying}
+        style={{ display: isReady ? "none" : "block" }}
+      >
         <SliedeTitle $leftCommonPadding={leftCommonPadding}>
           Now Playing
         </SliedeTitle>
-        <Slider items={slideItems} />
+        <Slider sliderID="nowPlaying" items={slideItems} />
       </NowPlaying>
 
       <Player
@@ -346,7 +364,7 @@ const BannerPlayer: React.FC<{
         {trailerData && (
           <YouTube
             ref={youtubeRef}
-            videoId={trailerData.results[1].key}
+            videoId={trailerData.results[0].key}
             opts={{
               width: bannerProps?.playerWidth ?? "100%",
               height: playerHeight,

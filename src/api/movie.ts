@@ -56,8 +56,13 @@ export const getTrailers = async (
   return await Axios.get(`/movie/${movieId}/videos`).then((res) => res.data);
 };
 
+export interface IGenre {
+  id: number;
+  name: string;
+}
 export interface IGetDetails {
   homepage: string;
+  genres: IGenre[];
 }
 
 export const getDetails = async (movieId: number): Promise<IGetDetails> => {

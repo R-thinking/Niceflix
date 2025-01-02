@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NetflixFullLogo from "../asets/NetfilxFullLogo";
+import NetflixFullLogo from "../asets/NetflixFullLogo";
 import {
   motion,
   useAnimation,
@@ -8,7 +8,7 @@ import {
 } from "framer-motion";
 import { Link, useRouteMatch } from "react-router-dom";
 import SearchBox from "./SearchBox";
-import { gloabalStore } from "../stores";
+import { globalStore } from "../stores";
 
 const Navigation = styled(motion.nav)<{ $leftCommonPadding: number }>`
   display: flex;
@@ -58,7 +58,7 @@ const Item = styled(motion.li)`
 `; */
 
 const Header = () => {
-  const leftCommonPadding = gloabalStore((state) => state.getCommonPadding());
+  const leftCommonPadding = globalStore((state) => state.getCommonPadding());
   const IsOnThisPage = (address: string) => useRouteMatch(address);
   const buttons = [
     { label: "Home", path: "/" },

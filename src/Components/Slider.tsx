@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import { IMovie } from "../api/movie";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ThumbnailPlayer from "./ThumbnailPlayer";
-import { gloabalStore } from "../stores";
+import { globalStore, sliderStore } from "../stores";
 import PreviousSlideIcon from "../asets/PreviousSlideIcon";
 import NextSlideIcon from "../asets/NextSlideIcon";
 
@@ -20,7 +20,7 @@ const SlideWrapper = styled.div<{ $slideWidth: number }>`
   width: ${(props) => `${props.$slideWidth}px`};
   display: flex;
   justify-content: center;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 interface SldieProps {
@@ -42,8 +42,8 @@ const Slide = styled(motion.div)<SldieProps>`
 `;
 
 const Item = styled(motion.div)<{ $itemHeight: number }>`
-  background-color: rgb(95, 95, 95);
   height: ${(props) => `${props.$itemHeight}px`};
+  position: relative;
 `;
 
 const PreviousSlideButton = styled.div<{ $bottom: number }>`
@@ -53,38 +53,48 @@ const PreviousSlideButton = styled.div<{ $bottom: number }>`
   position: absolute;
   left: 20px;
   bottom: ${(props) => `${props.$bottom}px`};
+  z-index: 1;
 `;
 
 const NextSlideButton = styled.div<{ $bottom: number }>`
   position: absolute;
   right: 20px;
-  bottom: 50px;
+  bottom: ${(props) => `${props.$bottom}px`};
+  z-index: 1;
 `;
 
 interface ISliderProps {
   items: IMovie[];
+  sliderID: string;
 }
 
 type IDirection = "PREVIOUS" | "NEXT";
 
-const Slider = ({ items }: ISliderProps) => {
+const Slider = ({ sliderID, items }: ISliderProps) => {
+  const nextSlideButtonRef = useRef<null | HTMLDivElement>(null);
+  const previousSlideButtonRef = useRef<null | HTMLDivElement>(null);
+  const setSlidesInfo = sliderStore((state) => state.setSlidesInfo);
   const [slideIndex, setSlideIndex] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const [rowIndex, setRowIndex] = useState(0);
-  const [direction, setDirection] = useState<IDirection>("NEXT");
 
-  const offset = gloabalStore((state) => state.offset);
+  const [direction, setDirection] = useState<IDirection>("NEXT");
+  const offset = globalStore((state) => state.offset);
   const totalMovies = items.length;
   const maxSlideIndex = Math.ceil(totalMovies / offset) - 1;
-  const itemGap = gloabalStore((state) => state.itemGap);
-  const slideWidth = gloabalStore((state) => state.getSlideWidth());
-  const itemWidth = gloabalStore((state) => state.getItemWidth());
-  const movingWidth = gloabalStore((state) => state.getMovingWidth());
-  const itemHeight = gloabalStore((state) => state.getItemHeight());
+  const itemGap = globalStore((state) => state.itemGap);
+  const slideWidth = globalStore((state) => state.getSlideWidth());
+  const itemWidth = globalStore((state) => state.getItemWidth());
+  const movingWidth = globalStore((state) => state.getMovingWidth());
+  const itemHeight = globalStore((state) => state.getItemHeight());
 
   const movingSlideButtonWidth = 16;
   const buttonIconViewbox = 1.6;
   const movingSlideButtonHeight = buttonIconViewbox * movingSlideButtonWidth;
+
+  useEffect(() => {
+    setSlidesInfo(sliderID, { slideIndex: slideIndex });
+  }, [slideIndex]);
 
   const showNextSlides = () => {
     if (isMoving) return;
@@ -129,6 +139,24 @@ const Slider = ({ items }: ISliderProps) => {
     };
   }, [windowSize, handleResize]);
 
+  const onClickItem = () => {
+    if (nextSlideButtonRef.current instanceof HTMLDivElement) {
+      nextSlideButtonRef.current.style.zIndex = "-1";
+    }
+    if (previousSlideButtonRef.current instanceof HTMLDivElement) {
+      previousSlideButtonRef.current.style.zIndex = "-1";
+    }
+  };
+
+  const onMouseLeaveFromItem = () => {
+    if (nextSlideButtonRef.current instanceof HTMLDivElement) {
+      nextSlideButtonRef.current.style.zIndex = "1";
+    }
+    if (previousSlideButtonRef.current instanceof HTMLDivElement) {
+      previousSlideButtonRef.current.style.zIndex = "1";
+    }
+  };
+
   return (
     <Wrapper $itemHeight={itemHeight}>
       <SlideWrapper $slideWidth={slideWidth}>
@@ -155,19 +183,32 @@ const Slider = ({ items }: ISliderProps) => {
           >
             {items.map((item, itemIndex) => (
               <Item
+                onClick={onClickItem}
+                onMouseLeave={onMouseLeaveFromItem}
                 $itemHeight={itemHeight}
-                initial={{ x: direction === "NEXT" ? slideWidth : -slideWidth }}
+                initial={{
+                  x: direction === "NEXT" ? slideWidth : -slideWidth,
+                }}
                 animate={{ x: 0 }}
-                exit={{ x: direction === "NEXT" ? -slideWidth : slideWidth }}
-                transition={{ type: "tween", duration: 1 }}
+                exit={{
+                  x: direction === "NEXT" ? -slideWidth : slideWidth,
+                }}
+                transition={{ duration: 1, type: "tween" }}
                 key={itemIndex}
               >
-                {<ThumbnailPlayer item={item} />}
+                <ThumbnailPlayer
+                  sliderID={sliderID}
+                  item={item}
+                  itemIndex={itemIndex}
+                  isFirstOneOfSlide={itemIndex % offset === 0}
+                  methodProps={{ showNextSlides, showPrevSlides }}
+                />
               </Item>
             ))}
           </Slide>
         </AnimatePresence>
         <PreviousSlideButton
+          ref={previousSlideButtonRef}
           onClick={showPrevSlides}
           onMouseOver={() => setDirection("PREVIOUS")}
           $bottom={(itemHeight - movingSlideButtonHeight) / 2}
@@ -175,6 +216,7 @@ const Slider = ({ items }: ISliderProps) => {
           <PreviousSlideIcon $iconWidth={`${movingSlideButtonWidth}px`} />
         </PreviousSlideButton>
         <NextSlideButton
+          ref={nextSlideButtonRef}
           onClick={showNextSlides}
           onMouseOver={() => setDirection("NEXT")}
           $bottom={(itemHeight - movingSlideButtonHeight) / 2}
