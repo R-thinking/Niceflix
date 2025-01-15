@@ -6,7 +6,7 @@ const BackgroundImage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("/assets/Coming Soon.jpg");
+  background-image: url("assets/Coming Soon.jpg");
   background-size: cover;
 `;
 const ComingSoon = () => {
