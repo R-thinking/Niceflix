@@ -3,6 +3,8 @@ import { createGlobalStyle } from "styled-components";
 import Header from "./Components/Header";
 
 import { Home, Shows, Movies, Latest, MyList } from "./Routes";
+import Login from "./Routes/Login";
+import LoginHeader from "./Components/LoginHeader";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,300;1,300&display=swap');
@@ -67,7 +69,7 @@ body {
   line-height:1.2;
   color:${(props) => props.theme.bodyColor};
   background-color: ${(props) => props.theme.bodyBackgroundColor};
-  height:200vh;
+  height:100vh;
   overflow-x: hidden;
 }
 
@@ -110,10 +112,14 @@ function App() {
     <>
       <GlobalStyle />
       <Router>
-        <Header />
+        {/* <Header /> */}
+        <LoginHeader />
         <Switch>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route exact path="/login">
+            <Login />
           </Route>
           <Route path="/shows">
             <Shows />

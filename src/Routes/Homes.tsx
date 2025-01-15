@@ -10,9 +10,10 @@ import styled from "styled-components";
 import { getMovieThumbnail } from "../api/youtube";
 import BannerPlayer from "../Components/BannerPlayer";
 import { useEffect, useState } from "react";
-import { playerStore } from "../stores";
+import { globalStore, playerStore } from "../stores";
 import PreviewPlayer from "../Components/PreviewPlayer";
 import MovieSlider from "../Components/MovieSlider";
+import { useHistory } from "react-router-dom";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -36,6 +37,12 @@ const ContentBox = styled.div`
 `;
 
 const Home = () => {
+  const history = useHistory();
+  const isLogin = globalStore((state) => state.isLogin);
+  if (!isLogin) {
+    history.push("/login");
+  }
+
   const {
     data: nowPlayingData,
     isLoading,
