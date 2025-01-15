@@ -10,6 +10,13 @@ const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
   margin-bottom: 5px;
 `;
 
+const sliderIdMap = new Map([
+  ["NOW_PLAYING", "Now Playing"],
+  ["TOR_RATED", "Top Rated"],
+  ["POPULAR", "Popular"],
+  ["UPCOMING", "Upcoming"],
+]);
+
 const MovieSlider: React.FC<{
   slideItems: IMovie[];
   sliderID: TMovieList;
@@ -18,7 +25,7 @@ const MovieSlider: React.FC<{
   return (
     <div>
       <SliedeTitle $leftCommonPadding={leftCommonPadding}>
-        Top Rated
+        {sliderIdMap.get(sliderID)}
       </SliedeTitle>
       <Slider sliderID={sliderID} videoType="MOVIE" items={slideItems} />
     </div>

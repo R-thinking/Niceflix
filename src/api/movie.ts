@@ -43,6 +43,10 @@ export const getPopular = async (): Promise<IMovieListResult> => {
   return await Axios.get("/movie/popular").then((res) => res.data);
 };
 
+export const getUpcoming = async (): Promise<IMovieListResult> => {
+  return await Axios.get("/movie/upcoming").then((res) => res.data);
+};
+
 export interface ITrailer {
   iso_639_1: string;
   iso_3166_1: string;

@@ -1,5 +1,10 @@
 import { useQuery } from "react-query";
-import { getNowPlaying, getPopular, getTopRated } from "../api/movie";
+import {
+  getNowPlaying,
+  getPopular,
+  getTopRated,
+  getUpcoming,
+} from "../api/movie";
 import { isAxiosError } from "axios";
 import styled from "styled-components";
 import { getMovieThumbnail } from "../api/youtube";
@@ -10,7 +15,7 @@ import PreviewPlayer from "../Components/PreviewPlayer";
 import MovieSlider from "../Components/MovieSlider";
 
 const Wrapper = styled.div`
-  /* height: 200vh; */
+  height: 100vh;
   position: relative;
 `;
 
@@ -19,6 +24,15 @@ const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ContentBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  gap: 50px;
 `;
 
 const Home = () => {
@@ -62,19 +76,29 @@ const Home = () => {
   const {
     data: popularData,
     error: popularError,
-    isError: isPopular,
+    isError: isPopularError,
   } = useQuery(["movies", "popular"], getPopular);
-  if (isPopular) {
+  if (isPopularError) {
     if (isAxiosError(popularError)) {
     }
   }
 
+  const {
+    data: upcomingData,
+    error: upcomingError,
+    isError: isUpcomingError,
+  } = useQuery(["movies", "upcoming"], getUpcoming);
+  if (isUpcomingError) {
+    if (isAxiosError(upcomingError)) {
+    }
+  }
+
   return (
-    <Wrapper>
+    <>
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
-        <>
+        <Wrapper>
           {movieItem ? (
             <BannerPlayer
               movie={movieItem.results[0]}
@@ -83,18 +107,29 @@ const Home = () => {
             />
           ) : null}
           {isVisible && <PreviewPlayer />}
-          {topRatedData && (
-            <MovieSlider
-              sliderID="TOR_RATED"
-              slideItems={topRatedData.results}
-            />
-          )}
-          {popularData && (
-            <MovieSlider sliderID="POPULAR" slideItems={popularData.results} />
-          )}
-        </>
+          <ContentBox>
+            {topRatedData && (
+              <MovieSlider
+                sliderID="TOR_RATED"
+                slideItems={topRatedData.results}
+              />
+            )}
+            {popularData && (
+              <MovieSlider
+                sliderID="POPULAR"
+                slideItems={popularData.results}
+              />
+            )}
+            {upcomingData && (
+              <MovieSlider
+                sliderID="UPCOMING"
+                slideItems={upcomingData.results}
+              />
+            )}
+          </ContentBox>
+        </Wrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 export default Home;
