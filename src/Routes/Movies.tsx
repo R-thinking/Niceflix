@@ -1,9 +1,7 @@
+import ComingSoon from "../Components/ComingSoon";
+
 const Movies = () => {
-  return (
-    <div>
-      <h1>Movies</h1>
-    </div>
-  );
+  return <ComingSoon />;
 };
 
 export default Movies;

@@ -1,9 +1,7 @@
+import ComingSoon from "../Components/ComingSoon";
+
 const Shows = () => {
-  return (
-    <div>
-      <h1>Shows</h1>
-    </div>
-  );
+  return <ComingSoon />;
 };
 
 export default Shows;

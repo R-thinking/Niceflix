@@ -1,9 +1,7 @@
+import ComingSoon from "../Components/ComingSoon";
+
 const MyList = () => {
-  return (
-    <div>
-      <h1>MyList</h1>
-    </div>
-  );
+  return <ComingSoon />;
 };
 
 export default MyList;
