@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import YouTube from "react-youtube";
 import { styled } from "styled-components";
-import { getDetails, getTrailers, IMovie } from "../api/movie";
+import { getDetails, getImages, getTrailers, IMovie } from "../api/movie";
 import { createImagePath } from "../utilities/image";
 import { useQuery } from "react-query";
 import { isAxiosError } from "axios";
@@ -51,7 +51,20 @@ const DescriptionLayer = styled(motion.div)<IDescriptionLayer>`
   }
 `;
 
-const Title = styled.p`
+const MovieTitleBox = styled.div<{ $hasmovieLogo: boolean | undefined }>`
+  width: ${(props) => (props.$hasmovieLogo ? "40%" : "70%")};
+  height: ${(props) => (props.$hasmovieLogo ? "25vh" : "15vh")};
+`;
+const MovieLogo = styled.div<{ $backdropPath: string }>`
+  width: 100%;
+  height: 100%;
+  background-image: url(${(props) => props.$backdropPath});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const Title = styled.div`
   font-size: 60px;
   font-weight: 700;
   width: 70%;
@@ -152,6 +165,25 @@ const BannerPlayer: React.FC<{
     () => getDuration(trailerData?.results[0].key ?? ""),
     { enabled: !!trailerData }
   );
+
+  const { data: movieImages } = useQuery(
+    ["logo", movie?.id],
+    () => {
+      if (movie) return getImages(movie.id);
+    },
+    {
+      enabled: !!movie,
+    }
+  );
+
+  const image = new Image();
+  const logo = new Image();
+  const backdropUrl = createImagePath(movie.backdrop_path);
+  let logoUrl = "";
+  const hasMovieLogo = movieImages && movieImages?.logos.length > 0;
+  if (hasMovieLogo) {
+    logoUrl = createImagePath(movieImages?.logos[0].file_path);
+  }
 
   const { data: detailData } = useQuery(["details"], () =>
     getDetails(movie.id)
@@ -316,9 +348,21 @@ const BannerPlayer: React.FC<{
         $slideItemHeight={slideItemHeight}
         className={isReady ? "playingVideo" : ""}
       >
-        <Title style={{ display: isReady ? "none" : "block" }}>
+        {/* <Title style={{ display: isReady ? "none" : "block" }}>
           {movie.title}
-        </Title>
+        </Title> */}
+        {movieImages && (
+          <MovieTitleBox
+            $hasmovieLogo={hasMovieLogo}
+            style={{ display: isReady ? "none" : "block" }}
+          >
+            {hasMovieLogo ? (
+              <MovieLogo $backdropPath={logoUrl} />
+            ) : (
+              <Title>{movie.title}</Title>
+            )}
+          </MovieTitleBox>
+        )}
         <Overview style={{ display: isReady ? "none" : "block" }}>
           {movie.overview}
         </Overview>

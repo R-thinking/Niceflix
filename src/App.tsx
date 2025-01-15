@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
+
 import { createGlobalStyle } from "styled-components";
 import Header from "./Components/Header";
 
@@ -108,33 +109,32 @@ progress {
 `;
 
 function App() {
+  const location = useLocation();
+
   return (
     <>
       <GlobalStyle />
-      <Router>
-        {/* <Header /> */}
-        <LoginHeader />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route path="/shows">
-            <Shows />
-          </Route>
-          <Route path="/movies">
-            <Movies />
-          </Route>
-          <Route path="/latest">
-            <Latest />
-          </Route>
-          <Route path="/my-list">
-            <MyList />
-          </Route>
-        </Switch>
-      </Router>
+      {location.pathname === "/login" ? <LoginHeader /> : <Header />}
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route path="/shows">
+          <Shows />
+        </Route>
+        <Route path="/movies">
+          <Movies />
+        </Route>
+        <Route path="/latest">
+          <Latest />
+        </Route>
+        <Route path="/my-list">
+          <MyList />
+        </Route>
+      </Switch>
     </>
   );
 }

@@ -11,7 +11,8 @@ const LoginBackground = styled.div`
       rgba(0, 0, 0, 0.4),
       rgba(0, 0, 0, 0.6)
     ),
-    url("../../public/assets/login_background.jpg");
+    ${() => `url(${process.env.PUBLIC_URL}/assets/login_background.jpg)`};
+
   background-size: cover;
   display: flex;
   justify-content: center;

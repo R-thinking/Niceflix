@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "styled-components";
 import darkTheme from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 
 const clent = new QueryClient();
 
@@ -15,7 +16,9 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={clent}>
       <ThemeProvider theme={darkTheme}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>
