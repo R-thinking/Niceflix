@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getNowPlaying } from "../api/movie";
+import { getNowPlaying, getTopRated } from "../api/movie";
 import { isAxiosError } from "axios";
 import styled from "styled-components";
 import { getMovieThumbnail } from "../api/youtube";
@@ -7,6 +7,7 @@ import BannerPlayer from "../Components/BannerPlayer";
 import { useEffect, useState } from "react";
 import { playerStore } from "../stores";
 import PreviewPlayer from "../Components/PreviewPlayer";
+import TopRated from "../Components/TopRated";
 
 const Wrapper = styled.div`
   /* height: 200vh; */
@@ -21,18 +22,22 @@ const Loader = styled.div`
 `;
 
 const Home = () => {
-  const { data, isLoading, error, isError } = useQuery(
-    ["movies", "nowPlaying"],
-    getNowPlaying
-  );
-  if (isError) {
-    if (isAxiosError(error)) {
+  const {
+    data: nowPlayingData,
+    isLoading,
+    error: nowPlayingError,
+    isError: isNowPlayingError,
+  } = useQuery(["movies", "nowPlaying"], getNowPlaying);
+  if (isNowPlayingError) {
+    if (isAxiosError(nowPlayingError)) {
     }
   }
   const removeLostItem = () => {
     const realData = {
-      ...data,
-      results: data?.results?.filter((item) => item.backdrop_path !== null),
+      ...nowPlayingData,
+      results: nowPlayingData?.results?.filter(
+        (item) => item.backdrop_path !== null
+      ),
     };
     return realData;
   };
@@ -40,10 +45,19 @@ const Home = () => {
   useEffect(() => {
     if (isLoading) return;
     setMovieItem(removeLostItem());
-  }, [data]);
+  }, [nowPlayingData]);
 
-  const { data: thumbnailData } = useQuery(["thumbnail"], getMovieThumbnail);
   const isVisible = playerStore((state) => state.isVisible);
+
+  const {
+    data: topRatedData,
+    error: topRatedError,
+    isError: isTopRatedError,
+  } = useQuery(["movies", "topRated"], getTopRated);
+  if (isTopRatedError) {
+    if (isAxiosError(topRatedError)) {
+    }
+  }
 
   return (
     <Wrapper>
@@ -59,6 +73,7 @@ const Home = () => {
             />
           ) : null}
           {isVisible && <PreviewPlayer />}
+          {topRatedData && <TopRated slideItems={topRatedData.results} />}
         </>
       )}
     </Wrapper>

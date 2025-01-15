@@ -32,6 +32,17 @@ export const getNowPlaying = async (): Promise<IGetNowPlayingResult> => {
   return await Axios.get("/movie/now_playing").then((res) => res.data);
 };
 
+export interface IGetTopRatedResult {
+  page: number;
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export const getTopRated = async (): Promise<IGetTopRatedResult> => {
+  return await Axios.get("/movie/top_rated").then((res) => res.data);
+};
+
 export interface ITrailer {
   iso_639_1: string;
   iso_3166_1: string;
