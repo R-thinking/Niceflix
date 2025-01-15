@@ -7,7 +7,7 @@ const BackgroundImage = styled.div`
   justify-content: center;
   align-items: center;
   background-image: ${() =>
-    `url(${process.env.PUBLIC_URL}/assets/Coming Soon.jpg)`};
+    `url(${process.env.PUBLIC_URL}/assets/coming_soon.jpg)`};
   background-size: cover;
 `;
 const ComingSoon = () => {
