@@ -14,6 +14,7 @@ interface IPlayerState {
     trailer: IGetTrailersResult | null;
     details: IGetDetails | null;
     images: TMovieImages;
+    videoType: IVideoType | null;
   };
 
   position: {
@@ -25,7 +26,8 @@ interface IPlayerState {
     movie: IMovie,
     trailer: IGetTrailersResult,
     details: IGetDetails,
-    images: TMovieImages
+    images: TMovieImages,
+    videoType: IVideoType
   ) => void;
   setPosition: (left: TPosition, top: TPosition) => void;
 }
@@ -41,13 +43,14 @@ export const playerStore = create<IPlayerState>()((set, get) => ({
       backdropImage: "",
       logoImage: "",
     },
+    videoType: null,
   },
   position: {
     left: "",
     top: "",
   },
-  setData: (movie, trailer, details, images) =>
-    set({ data: { movie, trailer, details, images } }),
+  setData: (movie, trailer, details, images, videoType) =>
+    set({ data: { movie, trailer, details, images, videoType } }),
   setVisibility: (visibility: boolean) => set({ isVisible: visibility }),
   setPosition: (left, top) => set({ position: { left, top } }),
 }));

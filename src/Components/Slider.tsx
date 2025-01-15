@@ -66,11 +66,12 @@ const NextSlideButton = styled.div<{ $bottom: number }>`
 interface ISliderProps {
   items: IMovie[];
   sliderID: string;
+  videoType: IVideoType;
 }
 
 type IDirection = "PREVIOUS" | "NEXT";
 
-const Slider = ({ sliderID, items }: ISliderProps) => {
+const Slider = ({ sliderID, items, videoType }: ISliderProps) => {
   const nextSlideButtonRef = useRef<null | HTMLDivElement>(null);
   const previousSlideButtonRef = useRef<null | HTMLDivElement>(null);
   const setSlidesInfo = sliderStore((state) => state.setSlidesInfo);
@@ -210,6 +211,7 @@ const Slider = ({ sliderID, items }: ISliderProps) => {
               >
                 <ThumbnailPlayer
                   sliderID={sliderID}
+                  videoType={videoType}
                   item={item}
                   itemIndex={itemIndex}
                   isFirstOneOfSlide={itemIndex % offset === 0}

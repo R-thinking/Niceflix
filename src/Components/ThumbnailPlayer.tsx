@@ -202,15 +202,17 @@ const PreviewGenres = styled.div`
 `;
 
 interface IThumbnailPlayerProps {
+  sliderID: string;
+  videoType: IVideoType;
   item: IMovie;
   isFirstOneOfSlide: Boolean;
   itemIndex: number;
-  sliderID: string;
   methodProps: { showNextSlides: () => void; showPrevSlides: () => void };
 }
 
 const ThumbnailPlayer = ({
   sliderID,
+  videoType,
   item,
   isFirstOneOfSlide,
   itemIndex,
@@ -350,10 +352,16 @@ const ThumbnailPlayer = ({
     const yAnimated = -45;
 
     if (trailerData && detailsData && image) {
-      setData(item, trailerData, detailsData, {
-        backdropImage: backdropUrl,
-        logoImage: logoUrl,
-      });
+      setData(
+        item,
+        trailerData,
+        detailsData,
+        {
+          backdropImage: backdropUrl,
+          logoImage: logoUrl,
+        },
+        videoType
+      );
     }
 
     if (thumbnailRef.current instanceof HTMLDivElement) {

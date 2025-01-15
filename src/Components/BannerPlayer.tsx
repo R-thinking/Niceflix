@@ -368,7 +368,7 @@ const BannerPlayer: React.FC<{
         <SliedeTitle $leftCommonPadding={leftCommonPadding}>
           Now Playing
         </SliedeTitle>
-        <Slider sliderID="nowPlaying" items={slideItems} />
+        <Slider sliderID="nowPlaying" videoType="MOVIE" items={slideItems} />
       </NowPlaying>
 
       <Player
