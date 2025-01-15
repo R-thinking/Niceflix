@@ -2,7 +2,7 @@ export declare global {
   type TTimer = ReturnType<typeof setTimeout> | null | number;
   type TSoundState = "MUTE" | "UNMUTE";
   type TVideo = "MOVIE" | "SHOWS";
-  type TMovieList = "NOW_PLAYING" | "TOR_RATED" | "POPULAR" | "UPCOMING";
+  type TMovieList = "NOW_PLAYING" | "TOP_RATED" | "POPULAR" | "UPCOMING";
   interface IYoutubePlayer {
     playVideo: () => Promise<void>;
     pauseVideo: () => Promise<void>;

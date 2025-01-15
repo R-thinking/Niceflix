@@ -6,7 +6,7 @@ import styled from "styled-components";
 Modal.setAppElement("#root");
 
 // Styled components for the App
-const AppContainer = styled.div`
+const ModalBox = styled.div`
   text-align: center;
   /* padding: 50px; */
 `;
@@ -96,9 +96,14 @@ const ModalBody = styled.div`
   padding: 10px 0;
   color: rgb(214, 214, 214);
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
 
-const CustomModal = () => {
+const CustomModal: React.FC<{
+  content: { title: string; body: string[] };
+}> = ({ content }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   // Open the modal
@@ -111,8 +116,13 @@ const CustomModal = () => {
     setIsModalOpen(false);
   };
 
+  const onClickOut = (event: React.MouseEvent) => {
+    if (event.target !== event.currentTarget) return;
+    closeModal();
+  };
+
   return (
-    <AppContainer>
+    <ModalBox>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -120,15 +130,16 @@ const CustomModal = () => {
         className="modal-content"
         overlayClassName="modal-overlay"
       >
-        <ModalOverlay>
+        <ModalOverlay onClick={onClickOut}>
           <ModalContent>
             <ModalHeader>
-              <ModalTitle>Netflix Clone 사이트입니다</ModalTitle>
-              <CloseButton onClick={closeModal}>X</CloseButton>
+              <ModalTitle>{content.title}</ModalTitle>
+              {/* <CloseButton onClick={closeModal}>X</CloseButton> */}
             </ModalHeader>
             <ModalBody>
-              <p>ID: 010-1234-1234</p>
-              <p>Password: 12341234</p>
+              {content.body.map((phrase, index) => (
+                <p key={index}>{phrase}</p>
+              ))}
             </ModalBody>
             <ModalFooter>
               <CloseModalButton onClick={closeModal}>Close</CloseModalButton>
@@ -136,7 +147,7 @@ const CustomModal = () => {
           </ModalContent>
         </ModalOverlay>
       </Modal>
-    </AppContainer>
+    </ModalBox>
   );
 };
 
