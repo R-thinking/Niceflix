@@ -6,6 +6,7 @@ import Header from "./Components/Header";
 import { Home, Shows, Movies, Latest, MyList } from "./Routes";
 import Login from "./Routes/Login";
 import LoginHeader from "./Components/LoginHeader";
+import CustomModal from "./Components/CustomModal";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,300;1,300&display=swap');
@@ -112,8 +113,9 @@ function App() {
   const location = useLocation();
 
   return (
-    <>
+    <div id="niceflixApp">
       <GlobalStyle />
+      <CustomModal />
       {location.pathname === "/login" ? <LoginHeader /> : <Header />}
       <Switch>
         <Route exact path="/">
@@ -135,7 +137,7 @@ function App() {
           <MyList />
         </Route>
       </Switch>
-    </>
+    </div>
   );
 }
 export default App;

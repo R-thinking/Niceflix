@@ -16,7 +16,7 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={clent}>
       <ThemeProvider theme={darkTheme}>
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <App />
         </BrowserRouter>
       </ThemeProvider>
