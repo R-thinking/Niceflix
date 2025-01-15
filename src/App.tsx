@@ -83,6 +83,26 @@ button {
   cursor:pointer;
 }
 
+progress {
+  appearance: none;
+  height:2.5px;
+  &::-webkit-progress-bar {
+    border-radius: 5px;
+    /* border: 1px solid rgba(167, 166, 166, 0.5); */
+    background-color:rgba(219, 219, 219, 0.5);
+    height: 2.5px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &::-webkit-progress-value {
+    background: rgba(212, 9, 19, 0.9);
+    border-radius: 0px;
+    height: 2.5px;
+    width: 100%;
+  }
+}
+
 `;
 
 function App() {

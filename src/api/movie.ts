@@ -63,8 +63,70 @@ export interface IGenre {
 export interface IGetDetails {
   homepage: string;
   genres: IGenre[];
+  release_date: string;
+  runtime: number;
 }
 
 export const getDetails = async (movieId: number): Promise<IGetDetails> => {
   return await Axios.get(`/movie/${movieId}`).then((res) => res.data);
+};
+
+export interface ILogo {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+export interface IGetImages {
+  backdrops: [];
+  id: number;
+  logos: ILogo[];
+  posters: [];
+}
+
+export const getImages = async (movieId: number): Promise<IGetImages> => {
+  return await Axios.get(`/movie//${movieId}/images`, {
+    params: { language: LOCALE },
+  }).then((res) => res.data);
+};
+
+export interface ICast {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+export interface IGetCredits {
+  id: string;
+  cast: ICast[];
+  crew: Array<{}>;
+}
+
+export const getCredits = async (movieId: number): Promise<IGetCredits> => {
+  return await Axios.get(`/movie/${movieId}/credits`).then((res) => res.data);
+};
+
+export interface IKeyword {
+  id: string;
+  name: string;
+}
+export interface IGetKeywords {
+  id: string;
+  keywords: IKeyword[];
+}
+
+export const getKeywords = async (movieId: number): Promise<IGetKeywords> => {
+  return await Axios.get(`/movie/${movieId}/keywords`).then((res) => res.data);
 };

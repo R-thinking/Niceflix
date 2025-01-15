@@ -96,15 +96,20 @@ const Slider = ({ sliderID, items }: ISliderProps) => {
     setSlidesInfo(sliderID, { slideIndex: slideIndex });
   }, [slideIndex]);
 
+  const [isRowBeingChanged, SetIsRowBeingChanged] = useState(false);
+
   const showNextSlides = () => {
     if (isMoving) return;
     setIsMoving(true);
 
     setSlideIndex((prev) => {
       if (prev === maxSlideIndex) {
+        SetIsRowBeingChanged(true);
         setRowIndex((prevIndex) => prevIndex + 1);
         return 0;
-      } else return prev + 1;
+      } else {
+        return prev + 1;
+      }
     });
   };
 
@@ -114,9 +119,12 @@ const Slider = ({ sliderID, items }: ISliderProps) => {
 
     setSlideIndex((prev) => {
       if (prev === 0) {
+        SetIsRowBeingChanged(true);
         setRowIndex((prevIndex) => prevIndex + 1);
         return maxSlideIndex;
-      } else return prev - 1;
+      } else {
+        return prev - 1;
+      }
     });
   };
 
@@ -176,9 +184,13 @@ const Slider = ({ sliderID, items }: ISliderProps) => {
             animate={{
               x: `${-slideIndex * movingWidth}px`,
             }}
-            transition={{ duration: 1, type: "tween" }}
+            transition={{
+              duration: isRowBeingChanged ? 1.5 : 1,
+              type: "tween",
+            }}
             onAnimationComplete={() => {
               setIsMoving(false);
+              SetIsRowBeingChanged(false);
             }}
           >
             {items.map((item, itemIndex) => (

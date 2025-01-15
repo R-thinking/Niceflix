@@ -97,13 +97,13 @@ const Controller = styled(motion.div)`
   }
 `;
 
-const ControlButton = styled.button`
+const ControlButton = styled(motion.button)`
   width: 139px;
   background-color: white;
   color: black;
 `;
 
-const InformationButton = styled.a`
+const InformationButton = styled(motion.a)`
   width: 161px;
   background-color: rgba(109, 109, 110, 0.7);
   color: white;
@@ -330,15 +330,31 @@ const BannerPlayer: React.FC<{
           }
         >
           {!isReady ? (
-            <ControlButton onClick={playPlayer}>
+            <ControlButton
+              whileHover={{
+                backgroundColor: "#b1b1b1",
+              }}
+              onClick={playPlayer}
+            >
               <PlayIcon iconwidth="21px" /> Preview
             </ControlButton>
           ) : (
-            <ControlButton onClick={stopPlayer}>
+            <ControlButton
+              whileHover={{
+                backgroundColor: "#b1b1b1",
+              }}
+              onClick={stopPlayer}
+            >
               <StopIcon iconwidth="21px" /> Stop
             </ControlButton>
           )}
-          <InformationButton href={detailData?.homepage} target="_blank">
+          <InformationButton
+            whileHover={{
+              backgroundColor: "#393939",
+            }}
+            href={detailData?.homepage}
+            target="_blank"
+          >
             <InfoIcon iconwidth="26px" />
             More Info
           </InformationButton>
