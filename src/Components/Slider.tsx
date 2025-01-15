@@ -66,7 +66,7 @@ const NextSlideButton = styled.div<{ $bottom: number }>`
 interface ISliderProps {
   items: IMovie[];
   sliderID: string;
-  videoType: IVideoType;
+  videoType: TVideo;
 }
 
 type IDirection = "PREVIOUS" | "NEXT";

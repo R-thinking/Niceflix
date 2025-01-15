@@ -171,9 +171,9 @@ const BannerPlayer: React.FC<{
   );
   useEffect(() => setPlayerHeight(window.innerHeight), [window.innerHeight]);
 
-  const [playTimer, setPlayTimer] = useState<Timer>(null);
-  const [backgroundTimer, setBackgroundTimer] = useState<Timer>(null);
-  const [hideTimer, setHideTimer] = useState<Timer>(null);
+  const [playTimer, setPlayTimer] = useState<TTimer>(null);
+  const [backgroundTimer, setBackgroundTimer] = useState<TTimer>(null);
+  const [hideTimer, setHideTimer] = useState<TTimer>(null);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
 
   const renewIsMouseMoving = () => {

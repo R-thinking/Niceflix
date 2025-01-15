@@ -10,18 +10,19 @@ const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
   margin-bottom: 5px;
 `;
 
-const TopRated: React.FC<{
+const MovieSlider: React.FC<{
   slideItems: IMovie[];
-}> = ({ slideItems }) => {
+  sliderID: TMovieList;
+}> = ({ slideItems, sliderID }) => {
   const leftCommonPadding = globalStore((state) => state.getCommonPadding());
   return (
     <div>
       <SliedeTitle $leftCommonPadding={leftCommonPadding}>
         Top Rated
       </SliedeTitle>
-      <Slider sliderID="topRated" videoType="MOVIE" items={slideItems} />
+      <Slider sliderID={sliderID} videoType="MOVIE" items={slideItems} />
     </div>
   );
 };
 
-export default TopRated;
+export default MovieSlider;

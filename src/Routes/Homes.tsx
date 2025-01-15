@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getNowPlaying, getTopRated } from "../api/movie";
+import { getNowPlaying, getPopular, getTopRated } from "../api/movie";
 import { isAxiosError } from "axios";
 import styled from "styled-components";
 import { getMovieThumbnail } from "../api/youtube";
@@ -7,7 +7,7 @@ import BannerPlayer from "../Components/BannerPlayer";
 import { useEffect, useState } from "react";
 import { playerStore } from "../stores";
 import PreviewPlayer from "../Components/PreviewPlayer";
-import TopRated from "../Components/TopRated";
+import MovieSlider from "../Components/MovieSlider";
 
 const Wrapper = styled.div`
   /* height: 200vh; */
@@ -59,6 +59,16 @@ const Home = () => {
     }
   }
 
+  const {
+    data: popularData,
+    error: popularError,
+    isError: isPopular,
+  } = useQuery(["movies", "popular"], getPopular);
+  if (isPopular) {
+    if (isAxiosError(popularError)) {
+    }
+  }
+
   return (
     <Wrapper>
       {isLoading ? (
@@ -73,7 +83,15 @@ const Home = () => {
             />
           ) : null}
           {isVisible && <PreviewPlayer />}
-          {topRatedData && <TopRated slideItems={topRatedData.results} />}
+          {topRatedData && (
+            <MovieSlider
+              sliderID="TOR_RATED"
+              slideItems={topRatedData.results}
+            />
+          )}
+          {popularData && (
+            <MovieSlider sliderID="POPULAR" slideItems={popularData.results} />
+          )}
         </>
       )}
     </Wrapper>

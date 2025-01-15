@@ -17,30 +17,30 @@ export interface IMovie {
   vote_average: number;
   vote_count: number;
 }
-export interface IGetNowPlayingResult {
-  dates: {
-    maximum: string;
-    minimum: string;
-  };
+
+export interface IMovieListResult {
   page: number;
   results: IMovie[];
   total_pages: number;
   total_results: number;
+}
+export interface IGetNowPlayingResult extends IMovieListResult {
+  dates: {
+    maximum: string;
+    minimum: string;
+  };
 }
 
 export const getNowPlaying = async (): Promise<IGetNowPlayingResult> => {
   return await Axios.get("/movie/now_playing").then((res) => res.data);
 };
 
-export interface IGetTopRatedResult {
-  page: number;
-  results: IMovie[];
-  total_pages: number;
-  total_results: number;
-}
-
-export const getTopRated = async (): Promise<IGetTopRatedResult> => {
+export const getTopRated = async (): Promise<IMovieListResult> => {
   return await Axios.get("/movie/top_rated").then((res) => res.data);
+};
+
+export const getPopular = async (): Promise<IMovieListResult> => {
+  return await Axios.get("/movie/popular").then((res) => res.data);
 };
 
 export interface ITrailer {

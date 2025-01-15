@@ -203,7 +203,7 @@ const PreviewGenres = styled.div`
 
 interface IThumbnailPlayerProps {
   sliderID: string;
-  videoType: IVideoType;
+  videoType: TVideo;
   item: IMovie;
   isFirstOneOfSlide: Boolean;
   itemIndex: number;
@@ -236,8 +236,8 @@ const ThumbnailPlayer = ({
   const youtubeRef = useRef<YouTube>(null);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const [activePlayer, setActivePreview] = useState(false);
-  const [playTimer, setPlayTimer] = useState<Timer>(null);
-  const [loopTimer, setLoopTimer] = useState<Timer>(null);
+  const [playTimer, setPlayTimer] = useState<TTimer>(null);
+  const [loopTimer, setLoopTimer] = useState<TTimer>(null);
 
   const playLoop = async (player: IYoutubePlayer, duration: number) => {
     setLoopTimer(
@@ -294,7 +294,7 @@ const ThumbnailPlayer = ({
     setIsPlayingVideo(false);
   };
 
-  const [sound, setSound] = useState<soundState>("MUTE");
+  const [sound, setSound] = useState<TSoundState>("MUTE");
   const onUnMute = async () => {
     const player: IYoutubePlayer =
       await youtubeRef.current?.getInternalPlayer();

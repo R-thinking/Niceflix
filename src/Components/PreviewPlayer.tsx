@@ -356,7 +356,7 @@ const PreviewPlayer = () => {
 
   const youtubeRef = useRef<YouTube>(null);
 
-  const [sound, setSound] = useState<soundState>("UNMUTE");
+  const [sound, setSound] = useState<TSoundState>("UNMUTE");
   const onUnMute = async () => {
     const player: IYoutubePlayer =
       await youtubeRef.current?.getInternalPlayer();

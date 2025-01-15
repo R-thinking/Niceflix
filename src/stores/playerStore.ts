@@ -14,7 +14,7 @@ interface IPlayerState {
     trailer: IGetTrailersResult | null;
     details: IGetDetails | null;
     images: TMovieImages;
-    videoType: IVideoType | null;
+    videoType: TVideo | null;
   };
 
   position: {
@@ -27,7 +27,7 @@ interface IPlayerState {
     trailer: IGetTrailersResult,
     details: IGetDetails,
     images: TMovieImages,
-    videoType: IVideoType
+    videoType: TVideo
   ) => void;
   setPosition: (left: TPosition, top: TPosition) => void;
 }
