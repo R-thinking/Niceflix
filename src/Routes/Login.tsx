@@ -182,17 +182,26 @@ const Login = () => {
             type="text"
             placeholder="Email or phone number"
           />
-          <span>{errors.email?.message}</span>
+
+          <span style={{ fontSize: 12, color: "#c51821", fontWeight: 500 }}>
+            {errors.email?.message}
+          </span>
           <PasswordInput
             {...register("password", {
               required: "Password is required",
+              validate: {
+                notValidPhone: (value) =>
+                  value !== "12341234" ? "Please Input 12341234" : true,
+              },
             })}
             type="password"
             name="password"
             autoComplete="new-password"
             placeholder="Password"
           />
-          <span>{errors.password?.message}</span>
+          <span style={{ fontSize: 12, color: "#c51821", fontWeight: 500 }}>
+            {errors.password?.message}
+          </span>
         </LoginForm>
         <SignIn onClick={onSiginIn}>Sign In</SignIn>
         <span style={{ color: "rgba(255, 255, 255, 0.6)" }}>OR</span>
