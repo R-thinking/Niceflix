@@ -220,10 +220,18 @@ const BannerPlayer: React.FC<{
     setTimeout(() => setIsMouseMoving(false), 500);
   };
 
-  const playInterval = 300000000; //30000
+  const playInterval = 30000; //30000
 
   const getPlayTimer = () => {
     const timer = setTimeout(async () => {
+      if (durationData) {
+        setEndTimer(
+          setTimeout(
+            async () => await stopPlayer(),
+            durationData > 30 ? playInterval - 1000 : durationData * 1000 - 1000
+          )
+        );
+      }
       const player = youtubeRef?.current?.getInternalPlayer();
       if (await player.isMuted()) await player.unMute();
       await player.seekTo(startTime);
@@ -234,6 +242,12 @@ const BannerPlayer: React.FC<{
       }, 500);
     }, playInterval);
     return timer;
+  };
+
+  const clearEndTimer = () => {
+    if (typeof endTimer === "number") {
+      clearTimeout(endTimer);
+    }
   };
 
   const clearPlayTimer = () => {
@@ -252,6 +266,7 @@ const BannerPlayer: React.FC<{
     setPlayTimer(timer);
   };
 
+  const [endTimer, setEndTimer] = useState<TTimer>(null);
   const onEndPlayer = () => {
     clearPlayTimer();
 
@@ -282,6 +297,14 @@ const BannerPlayer: React.FC<{
     );
 
     const timer = setTimeout(async () => {
+      if (durationData) {
+        setEndTimer(
+          setTimeout(
+            async () => await stopPlayer(),
+            durationData > 30 ? playInterval - 1000 : durationData * 1000 - 1000
+          )
+        );
+      }
       await player.seekTo(startTime);
       await player.playVideo();
       setTimeout(async () => {
@@ -295,6 +318,7 @@ const BannerPlayer: React.FC<{
 
   const stopPlayer = async () => {
     clearPlayTimer();
+    clearEndTimer();
 
     onEndPlayer();
     await youtubeRef?.current?.getInternalPlayer().pauseVideo();
@@ -378,7 +402,7 @@ const BannerPlayer: React.FC<{
               whileHover={{
                 backgroundColor: "#b1b1b1",
               }}
-              onClick={playPlayer}
+              onClick={() => {}}
             >
               <PlayIcon iconwidth="21px" /> Preview
             </ControlButton>
@@ -435,7 +459,7 @@ const BannerPlayer: React.FC<{
               },
             }}
             onReady={onReadyPlayer}
-            onEnd={onEndPlayer}
+            // onEnd={onEndPlayer}
           />
         )}
       </Player>

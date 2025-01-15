@@ -115,7 +115,14 @@ function App() {
   return (
     <div id="niceflixApp">
       <GlobalStyle />
-      <CustomModal />
+      {location.pathname === "/login" ? (
+        <CustomModal
+          content={{
+            title: "Netflix Clone 사이트입니다",
+            body: ["ID: 010-1234-1234", "Password: 12341234"],
+          }}
+        />
+      ) : null}
       {location.pathname === "/login" ? <LoginHeader /> : <Header />}
       <Switch>
         <Route exact path="/">

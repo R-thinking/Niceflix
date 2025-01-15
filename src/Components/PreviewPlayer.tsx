@@ -397,7 +397,6 @@ const PreviewPlayer = () => {
     }, duration * 1000 - 1000);
   };
   const onReadyPlayer = async () => {
-    handleResize();
     const player: IYoutubePlayer =
       await youtubeRef.current?.getInternalPlayer();
     const duration = await player.getDuration();
@@ -405,9 +404,10 @@ const PreviewPlayer = () => {
       await player.mute();
       await player.playVideo();
       setTimeout(async () => {
+        handleResize();
         setIsPlayingVideo(true);
         await player.unMute();
-      }, 3500);
+      }, 5500);
       await playLoop(player, duration);
     }
   };
