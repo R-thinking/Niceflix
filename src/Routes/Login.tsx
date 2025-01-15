@@ -11,7 +11,7 @@ const LoginBackground = styled.div`
       rgba(0, 0, 0, 0.4),
       rgba(0, 0, 0, 0.6)
     ),
-    url("assets/login_background.jpg");
+    url("../../public/assets/login_background.jpg");
   background-size: cover;
   display: flex;
   justify-content: center;
