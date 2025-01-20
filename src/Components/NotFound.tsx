@@ -26,8 +26,6 @@ const Description = styled.div`
   gap: 5px;
 `;
 
-const logoColor = "#d81f26";
-
 const HomeLink = styled(Link)`
   font-size: 24px;
   font-weight: 400;
@@ -40,7 +38,7 @@ const NotFound = () => {
       <NotFoundLogo>Page Not Found</NotFoundLogo>
       <Description>
         <p>
-          The page you are looking for doesn't exist or an other error occured.
+          The page you are looking for doesn't exist or an other error occurred.
         </p>
         <p>
           Please head to our <HomeLink to="/">Home</HomeLink> that does exist.
