@@ -7,6 +7,7 @@ import { Home, Shows, Movies, Latest, MyList } from "./Routes";
 import Login from "./Routes/Login";
 import LoginHeader from "./Components/LoginHeader";
 import CustomModal from "./Components/CustomModal";
+import NotFound from "./Components/NotFound";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,300;1,300&display=swap');
@@ -142,6 +143,9 @@ function App() {
         </Route>
         <Route path="/my-list">
           <MyList />
+        </Route>
+        <Route path="/*">
+          <NotFound />
         </Route>
       </Switch>
     </div>

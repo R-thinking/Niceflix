@@ -12,7 +12,7 @@ const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
 
 const sliderIdMap = new Map([
   ["NOW_PLAYING", "Now Playing"],
-  ["TOR_RATED", "Top Rated"],
+  ["TOP_RATED", "Top Rated"],
   ["POPULAR", "Popular"],
   ["UPCOMING", "Upcoming"],
 ]);
