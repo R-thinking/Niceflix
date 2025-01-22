@@ -6,14 +6,12 @@ interface IGlabalState {
   offset: number;
   itemGap: number;
   commonPaddingPercent: number;
-  isLogin: boolean;
   getCommonPadding: () => number;
   getSlideWidth: () => number;
   partialNextSlideWidth: number;
   getItemWidth: () => number;
   getMovingWidth: () => number;
   getItemHeight: () => number;
-  setLogin: () => void;
 }
 
 export const globalStore = create<IGlabalState>()(
@@ -24,7 +22,6 @@ export const globalStore = create<IGlabalState>()(
       itemGap: 10,
       partialNextSlideWidth: 30,
       commonPaddingPercent: 2.5,
-      isLogin: false,
       getCommonPadding: () =>
         (window.outerWidth * get().commonPaddingPercent) / 100,
       getSlideWidth: () =>
@@ -37,9 +34,6 @@ export const globalStore = create<IGlabalState>()(
       getMovingWidth: () =>
         get().offset * (get().getItemWidth() + get().itemGap),
       getItemHeight: () => get().getItemWidth() / get().goldenRatio,
-      setLogin: () => {
-        set({ isLogin: true });
-      },
     }),
     {
       name: "global-storage", // name of the item in the storage (must be unique)

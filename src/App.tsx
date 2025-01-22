@@ -118,10 +118,12 @@ function App() {
       <GlobalStyle />
       {location.pathname === "/login" ? (
         <CustomModal
+          modalID="LOGIN_INFO_NOTICE"
           content={{
             title: "Netflix Clone 사이트입니다",
             body: ["ID: 010-1234-1234", "Password: 12341234"],
           }}
+          options={{ dontOpenAgain: { visible: true } }}
         />
       ) : null}
       {location.pathname === "/login" ? <LoginHeader /> : <Header />}

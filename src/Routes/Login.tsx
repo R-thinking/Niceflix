@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { globalStore } from "../stores";
+import { userStore } from "../stores";
 
 const LoginBackground = styled.div`
   height: 100vh;
@@ -90,6 +90,7 @@ const SignInCode = styled.div`
 `;
 const ForgotPassword = styled.div`
   color: white;
+  cursor: pointer;
 `;
 const RememberUserCheckBox = styled.div`
   width: 100%;
@@ -108,12 +109,12 @@ const SignupLinkBox = styled.div`
   width: 100%;
   display: flex;
   gap: 5px;
-  cursor: pointer;
   font-size: 16px;
 `;
 const LinkToSignup = styled.span`
   color: white;
   font-weight: 500;
+  cursor: pointer;
 `;
 
 const NoticeReCAPTCHA = styled.div`
@@ -132,7 +133,7 @@ interface IForm {
 
 const Login = () => {
   const history = useHistory();
-  const setLogin = globalStore((state) => state.setLogin);
+  const setLogin = userStore((state) => state.setLogin);
   const {
     register,
     handleSubmit,

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
+import { TModalID, userStore } from "../stores/userStore";
+import { is24HoursOrMore } from "../utilities/time";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
@@ -76,7 +78,19 @@ const CloseButton = styled.button`
 const ModalFooter = styled.div`
   margin-top: 20px;
   text-align: right;
+  position: relative;
 `;
+
+const DontOpenAgain = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  gap: 5px;
+`;
+
+const CheckDontOpenAgain = styled.input``;
+const Description = styled.span``;
 
 const CloseModalButton = styled.button`
   background-color: #e50914;
@@ -103,7 +117,13 @@ const ModalBody = styled.div`
 
 const CustomModal: React.FC<{
   content: { title: string; body: string[] };
-}> = ({ content }) => {
+  modalID?: TModalID;
+  options?: {
+    dontOpenAgain?: {
+      visible: boolean;
+    };
+  };
+}> = ({ content, modalID, options }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   // Open the modal
@@ -121,10 +141,35 @@ const CustomModal: React.FC<{
     closeModal();
   };
 
+  const dontOpenAgainCheckboxRef = useRef(null);
+  const dontOpenAgainModalIds = userStore(
+    (state) => state.dontOpenAgainModalIds
+  );
+  const addDontOpenModal = userStore((state) => state.addDontOpenModal);
+  const deleteDontOpenModal = userStore((state) => state.deleteDontOpenModal);
+  const onCheckDontOpenAgain = () => {
+    if (modalID) {
+      addDontOpenModal(modalID);
+    }
+  };
+  const [isDontOpenModal, setIsDontOpenModal] = useState(true);
+
+  useEffect(() => {
+    if (modalID && typeof dontOpenAgainModalIds[modalID] === "string") {
+      if (is24HoursOrMore(new Date(dontOpenAgainModalIds[modalID] as string))) {
+        deleteDontOpenModal(modalID);
+      }
+    }
+    if (modalID)
+      setIsDontOpenModal(
+        modalID ? Object.keys(dontOpenAgainModalIds).includes(modalID) : false
+      );
+  }, [modalID && dontOpenAgainModalIds[modalID]]);
+
   return (
     <ModalBox>
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isModalOpen && !(modalID && isDontOpenModal)}
         onRequestClose={closeModal}
         shouldCloseOnOverlayClick={true}
         className="modal-content"
@@ -142,6 +187,16 @@ const CustomModal: React.FC<{
               ))}
             </ModalBody>
             <ModalFooter>
+              {options?.dontOpenAgain?.visible ? (
+                <DontOpenAgain>
+                  <CheckDontOpenAgain
+                    ref={dontOpenAgainCheckboxRef}
+                    type="checkbox"
+                    onClick={onCheckDontOpenAgain}
+                  />
+                  <Description>오늘 보지 않기</Description>
+                </DontOpenAgain>
+              ) : null}
               <CloseModalButton onClick={closeModal}>Close</CloseModalButton>
             </ModalFooter>
           </ModalContent>

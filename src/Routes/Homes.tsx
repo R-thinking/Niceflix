@@ -7,10 +7,9 @@ import {
 } from "../api/movie";
 import { isAxiosError } from "axios";
 import styled from "styled-components";
-import { getMovieThumbnail } from "../api/youtube";
 import BannerPlayer from "../Components/BannerPlayer";
 import { useEffect, useRef, useState } from "react";
-import { globalStore, playerStore } from "../stores";
+import { playerStore, userStore } from "../stores";
 import PreviewPlayer from "../Components/PreviewPlayer";
 import MovieSlider from "../Components/MovieSlider";
 import { useHistory } from "react-router-dom";
@@ -39,7 +38,7 @@ const ContentBox = styled.div`
 
 const Home = () => {
   const history = useHistory();
-  const isLogin = globalStore((state) => state.isLogin);
+  const isLogin = userStore((state) => state.isLogin);
   if (!isLogin) {
     history.push("/login");
   }
@@ -150,6 +149,7 @@ const Home = () => {
       ) : (
         <Wrapper>
           <CustomModal
+            modalID="HOME_USAGE_NOTICE"
             content={{
               title: "사용 안내",
               body: [
@@ -160,6 +160,7 @@ const Home = () => {
                 "광고가 나올 경우 다시 시도하시거나 다른 영상으로 눌러주시기 바랍니다.",
               ],
             }}
+            options={{ dontOpenAgain: { visible: true } }}
           />
           {movieItem ? (
             <div
