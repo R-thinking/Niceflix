@@ -11,7 +11,7 @@ import SearchBox from "./SearchBox";
 import { globalStore, userStore } from "../stores";
 import BellIcon from "../asets/BellIcon";
 import DownArrowFilledIcon from "../asets/DownArrowFilledIcon";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AvatarIcon1 from "../asets/avatars/AvatarIcon1";
 import DropdownMenu from "./DropdownMenu";
 import PencilIcon from "../asets/PencilIcon";
@@ -69,6 +69,9 @@ const NoticeBox = styled.div`
 `;
 const ProfileMenu = styled.div`
   position: relative;
+`;
+
+const ProfileContent = styled.div`
   display: flex;
   gap: 5px;
   cursor: pointer;
@@ -97,6 +100,9 @@ const Header = () => {
 
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const toggleDropDown = () => setIsDropDownOpen((state) => !state);
+  const onclickProfileMenu = (event: React.MouseEvent) => {
+    toggleDropDown();
+  };
   const setSignOut = userStore((state) => state.setSignOut);
 
   return (
@@ -133,18 +139,21 @@ const Header = () => {
         <NoticeBox>
           <BellIcon $iconWidth="20px" />
         </NoticeBox>
-        <ProfileMenu onClick={toggleDropDown}>
-          <AvatarIcon1 $iconWidth="32px" />
-          <motion.div
-            style={{ display: "flex", justifyContent: "center" }}
-            animate={{
-              transform: isDropDownOpen ? "rotate(180deg)" : "rotate(0)",
-            }}
-          >
-            <DownArrowFilledIcon $iconWidth="10px" />
-          </motion.div>
+        <ProfileMenu>
+          <ProfileContent onClick={onclickProfileMenu}>
+            <AvatarIcon1 $iconWidth="32px" />
+            <motion.div
+              style={{ display: "flex", justifyContent: "center" }}
+              animate={{
+                transform: isDropDownOpen ? "rotate(180deg)" : "rotate(0)",
+              }}
+            >
+              <DownArrowFilledIcon $iconWidth="10px" />
+            </motion.div>
+          </ProfileContent>
           {isDropDownOpen && (
             <DropdownMenu
+              toggleDisplay={toggleDropDown}
               menus={[
                 {
                   icon: <AvatarIcon1 $iconWidth="32px" />,

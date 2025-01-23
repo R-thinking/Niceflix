@@ -9,6 +9,15 @@ const DropdownContainer = styled.div`
   cursor: auto;
 `;
 
+const DropdownOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+`;
+
 const Indicator = styled.div`
   position: absolute;
   top: -12px;
@@ -51,12 +60,14 @@ interface IMenu {
   height?: string;
 }
 
-const DropdownMenu: React.FC<{ menus: IMenu[]; footers?: IMenu[] }> = ({
-  menus,
-  footers,
-}) => {
+const DropdownMenu: React.FC<{
+  toggleDisplay: () => void;
+  menus: IMenu[];
+  footers?: IMenu[];
+}> = ({ menus, footers, toggleDisplay }) => {
   return (
     <DropdownContainer>
+      <DropdownOverlay onClick={toggleDisplay} />
       <Indicator>
         <UpArrowFilledIcon $iconWidth="16px" />
       </Indicator>
@@ -64,7 +75,14 @@ const DropdownMenu: React.FC<{ menus: IMenu[]; footers?: IMenu[] }> = ({
         {menus.map((menu) => (
           <Menu $width={menu.width} $height={menu.height}>
             {menu.icon}
-            <TextButton onClick={menu.onClick}>{menu.name}</TextButton>
+            <TextButton
+              onClick={() => {
+                menu.onClick();
+                toggleDisplay();
+              }}
+            >
+              {menu.name}
+            </TextButton>
           </Menu>
         ))}
       </MenuContainer>
@@ -77,7 +95,14 @@ const DropdownMenu: React.FC<{ menus: IMenu[]; footers?: IMenu[] }> = ({
                 style={{ justifyContent: "center" }}
               >
                 {footer.icon}
-                <TextButton onClick={footer.onClick}>{footer.name}</TextButton>
+                <TextButton
+                  onClick={() => {
+                    footer.onClick();
+                    toggleDisplay();
+                  }}
+                >
+                  {footer.name}
+                </TextButton>
               </Menu>
             ))
           : null}
