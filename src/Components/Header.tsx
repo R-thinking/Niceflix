@@ -8,7 +8,16 @@ import {
 } from "framer-motion";
 import { Link, useRouteMatch } from "react-router-dom";
 import SearchBox from "./SearchBox";
-import { globalStore } from "../stores";
+import { globalStore, userStore } from "../stores";
+import BellIcon from "../asets/BellIcon";
+import DownArrowFilledIcon from "../asets/DownArrowFilledIcon";
+import { useState } from "react";
+import AvatarIcon1 from "../asets/avatars/AvatarIcon1";
+import DropdownMenu from "./DropdownMenu";
+import PencilIcon from "../asets/PencilIcon";
+import SmileIcon from "../asets/SmileIcon";
+import AccountIcon from "../asets/AccountIcon";
+import QuestionMarkIcon from "../asets/QuestionMarkIcon";
 
 const Navigation = styled(motion.nav)<{ $leftCommonPadding: number }>`
   display: flex;
@@ -48,14 +57,22 @@ const Item = styled(motion.li)`
   align-items: center;
 `;
 
-/* const Circle = styled.span`
-  position: absolute;
-  bottom: -5px;
-  width: 5px;
-  height: 5px;
-  border-radius: 2.5px;
-  background-color: ${(props) => props.theme.logoFillColor};
-`; */
+const PersonalMenu = styled.div`
+  margin-right: 3%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const NoticeBox = styled.div`
+  cursor: pointer;
+`;
+const ProfileMenu = styled.div`
+  position: relative;
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+`;
 
 const Header = () => {
   const leftCommonPadding = globalStore((state) => state.getCommonPadding());
@@ -77,6 +94,10 @@ const Header = () => {
       navigationAnimation.start("top");
     }
   });
+
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const toggleDropDown = () => setIsDropDownOpen((state) => !state);
+  const setSignOut = userStore((state) => state.setSignOut);
 
   return (
     <Navigation
@@ -107,9 +128,61 @@ const Header = () => {
           ))}
         </Items>
       </Column>
-      <Column>
+      <PersonalMenu>
         <SearchBox />
-      </Column>
+        <NoticeBox>
+          <BellIcon $iconWidth="20px" />
+        </NoticeBox>
+        <ProfileMenu onClick={toggleDropDown}>
+          <AvatarIcon1 $iconWidth="32px" />
+          <motion.div
+            style={{ display: "flex", justifyContent: "center" }}
+            animate={{
+              transform: isDropDownOpen ? "rotate(180deg)" : "rotate(0)",
+            }}
+          >
+            <DownArrowFilledIcon $iconWidth="10px" />
+          </motion.div>
+          {isDropDownOpen && (
+            <DropdownMenu
+              menus={[
+                {
+                  icon: <AvatarIcon1 $iconWidth="32px" />,
+                  name: "Test User",
+                  onClick: () => {},
+                },
+                {
+                  icon: <PencilIcon $iconWidth="32px" />,
+                  name: "Manage Profiles",
+                  onClick: () => {},
+                },
+                {
+                  icon: <SmileIcon $iconWidth="32px" />,
+                  name: "Transfer Profiles",
+                  onClick: () => {},
+                },
+                {
+                  icon: <AccountIcon $iconWidth="32px" />,
+                  name: "Account",
+                  onClick: () => {},
+                },
+                {
+                  icon: <QuestionMarkIcon $iconWidth="32px" />,
+                  name: "Help Center",
+                  onClick: () => {},
+                },
+              ]}
+              footers={[
+                {
+                  name: "Sign out of the Netflix",
+                  onClick: setSignOut,
+                  height: "48px",
+                },
+              ]}
+            />
+          )}
+        </ProfileMenu>
+      </PersonalMenu>
     </Navigation>
   );
 };

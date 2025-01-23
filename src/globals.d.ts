@@ -13,4 +13,8 @@ export declare global {
     getDuration: () => Promise<number>;
     setSize: (width: number, height: number) => Promise<void>;
   }
+
+  interface ICommonIconProps {
+    $iconWidth: string;
+  }
 }

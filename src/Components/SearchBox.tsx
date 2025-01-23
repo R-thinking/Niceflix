@@ -8,10 +8,10 @@ const Box = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 100px;
 `;
 const Wrapper = styled(motion.div)`
   z-index: 1;
+  cursor: pointer;
 `;
 
 const Input = styled(motion.input)`

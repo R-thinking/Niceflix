@@ -404,7 +404,7 @@ const BannerPlayer: React.FC<{
               }}
               onClick={() => {}}
             >
-              <PlayIcon iconwidth="21px" /> Preview
+              <PlayIcon iconwidth="21px" /> Play
             </ControlButton>
           ) : (
             <ControlButton

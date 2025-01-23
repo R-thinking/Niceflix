@@ -6,6 +6,7 @@ export type TModalID = "HOME_USAGE_NOTICE" | "LOGIN_INFO_NOTICE";
 interface IUserState {
   isLogin: boolean;
   setLogin: () => void;
+  setSignOut: () => void;
   dontOpenAgainModalIds: {
     [modalID in TModalID]?: string;
   };
@@ -19,6 +20,9 @@ export const userStore = create<IUserState>()(
       isLogin: false,
       setLogin: () => {
         set({ isLogin: true });
+      },
+      setSignOut: () => {
+        set({ isLogin: false });
       },
       dontOpenAgainModalIds: {},
       addDontOpenModal: (modalID: TModalID) => {
