@@ -8,6 +8,7 @@ import Login from "./Routes/Login";
 import LoginHeader from "./Components/LoginHeader";
 import CustomModal from "./Components/CustomModal";
 import NotFound from "./Components/NotFound";
+import Footer from "./Components/Footer";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,300;1,300&display=swap');
@@ -72,7 +73,6 @@ body {
   line-height:1.2;
   color:${(props) => props.theme.bodyColor};
   background-color: ${(props) => props.theme.bodyBackgroundColor};
-  height:100vh;
   overflow-x: hidden;
 }
 
@@ -114,7 +114,7 @@ function App() {
   const location = useLocation();
 
   return (
-    <div id="niceflixApp">
+    <div id="niceflixApp" style={{ display: "flex", flexDirection: "column" }}>
       <GlobalStyle />
       {location.pathname === "/login" ? (
         <CustomModal
@@ -150,6 +150,7 @@ function App() {
           <NotFound />
         </Route>
       </Switch>
+      {location.pathname === "/login" ? null : <Footer />}
     </div>
   );
 }

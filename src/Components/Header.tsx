@@ -135,8 +135,10 @@ const Header = () => {
         </Items>
       </Column>
       <PersonalMenu>
-        <SearchBox />
-        <NoticeBox>
+        <div onClick={() => setIsDropDownOpen(false)}>
+          <SearchBox />
+        </div>
+        <NoticeBox onClick={() => setIsDropDownOpen(false)}>
           <BellIcon $iconWidth="20px" />
         </NoticeBox>
         <ProfileMenu>

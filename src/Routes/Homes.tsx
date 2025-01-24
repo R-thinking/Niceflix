@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 import CustomModal from "../Components/CustomModal";
 
 const Wrapper = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
   position: relative;
 `;
 
