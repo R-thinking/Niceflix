@@ -9,7 +9,6 @@ import { isAxiosError } from "axios";
 import { getDuration } from "../api/youtube";
 import PlayIcon from "../asets/PlayIcon";
 import InfoIcon from "../asets/InfoIcon";
-import StopIcon from "../asets/StopIcon";
 import { globalStore } from "../stores";
 import Slider from "./Slider";
 
@@ -45,10 +44,6 @@ const DescriptionLayer = styled(motion.div)<IDescriptionLayer>`
   gap: 5px;
   z-index: 2;
   margin-bottom: 100px;
-  &.playingVideo {
-    bottom: 20px;
-    margin-bottom: 0;
-  }
 `;
 
 const MovieTitleBox = styled.div<{ $hasmovieLogo: boolean | undefined }>`
@@ -80,6 +75,7 @@ const NowPlaying = styled.div`
   width: 100%;
   position: absolute;
   bottom: 30px;
+  z-index: 2;
 `;
 
 const SliedeTitle = styled.div<{ $leftCommonPadding: number }>`
@@ -121,11 +117,6 @@ const InformationButton = styled(motion.a)`
   background-color: rgba(109, 109, 110, 0.7);
   color: white;
 `;
-
-const controllerVariants = {
-  inactive: { opacity: 0 },
-  active: { opacity: 1, transition: { duration: 1.5 } },
-};
 
 const Player = styled(motion.div)`
   position: absolute;
@@ -176,9 +167,6 @@ const BannerPlayer: React.FC<{
     }
   );
 
-  const image = new Image();
-  const logo = new Image();
-  const backdropUrl = createImagePath(movie.backdrop_path);
   let logoUrl = "";
   const hasMovieLogo = movieImages && movieImages?.logos.length > 0;
   if (hasMovieLogo) {
@@ -216,11 +204,12 @@ const BannerPlayer: React.FC<{
     setHideTimer(setTimeout(() => setIsMouseMoving(false), 1200));
   };
 
-  const hideController = () => {
+  /* const hideController = () => {
     setTimeout(() => setIsMouseMoving(false), 500);
-  };
+  }; */
 
-  const playInterval = 30000; //30000
+  const playInterval = 10000; //30000
+  const playTime = 30000;
 
   const getPlayTimer = () => {
     const timer = setTimeout(async () => {
@@ -228,12 +217,12 @@ const BannerPlayer: React.FC<{
         setEndTimer(
           setTimeout(
             async () => await stopPlayer(),
-            durationData > 30 ? playInterval - 1000 : durationData * 1000 - 1000
+            durationData > 30 ? playTime - 1000 : durationData * 1000 - 1000
           )
         );
       }
       const player = youtubeRef?.current?.getInternalPlayer();
-      if (await player.isMuted()) await player.unMute();
+      if (player && (await player.isMuted())) await player.unMute();
       await player.seekTo(startTime);
       await player.playVideo();
 
@@ -301,7 +290,7 @@ const BannerPlayer: React.FC<{
         setEndTimer(
           setTimeout(
             async () => await stopPlayer(),
-            durationData > 30 ? playInterval - 1000 : durationData * 1000 - 1000
+            durationData > 30 ? playTime - 1000 : durationData * 1000 - 1000
           )
         );
       }
@@ -324,38 +313,26 @@ const BannerPlayer: React.FC<{
     await youtubeRef?.current?.getInternalPlayer().pauseVideo();
   };
 
-  const clearBackgroundTimer = () => {
+  /* const clearBackgroundTimer = () => {
     if (typeof backgroundTimer === "number") {
       clearTimeout(backgroundTimer);
     }
-  };
-  const playPlayer = async () => {
+  }; */
+  /* const playPlayer = async () => {
     clearPlayTimer();
     clearBackgroundTimer();
     if (isReady) return;
 
     const player = youtubeRef?.current?.getInternalPlayer();
     setTimeout(async () => {
-      if (await player.isMuted()) await player.unMute();
+      if (player && (await player.isMuted())) await player.unMute();
       await player.seekTo(startTime);
       await player.playVideo();
       setIsReady(true);
     }, 500);
 
     hideController();
-  };
-
-  const descriptionRef = useRef<HTMLDivElement | null>(null);
-  const onClickNowPlaying = () => {
-    if (descriptionRef.current instanceof HTMLDivElement) {
-      descriptionRef.current.style.zIndex = "0";
-    }
-  };
-  const onMouseLeaveFromNowPlaying = () => {
-    if (descriptionRef.current instanceof HTMLDivElement) {
-      descriptionRef.current.style.zIndex = "2";
-    }
-  };
+  }; */
 
   return (
     <Banner
@@ -367,19 +344,11 @@ const BannerPlayer: React.FC<{
         onMouseMove={renewIsMouseMoving}
       ></MovingListener>
       <DescriptionLayer
-        ref={descriptionRef}
         $leftCommonPadding={leftCommonPadding}
         $slideItemHeight={slideItemHeight}
-        className={isReady ? "playingVideo" : ""}
       >
-        {/* <Title style={{ display: isReady ? "none" : "block" }}>
-          {movie.title}
-        </Title> */}
         {movieImages && (
-          <MovieTitleBox
-            $hasmovieLogo={hasMovieLogo}
-            style={{ display: isReady ? "none" : "block" }}
-          >
+          <MovieTitleBox $hasmovieLogo={hasMovieLogo}>
             {hasMovieLogo ? (
               <MovieLogo $backdropPath={logoUrl} />
             ) : (
@@ -387,17 +356,9 @@ const BannerPlayer: React.FC<{
             )}
           </MovieTitleBox>
         )}
-        <Overview style={{ display: isReady ? "none" : "block" }}>
-          {movie.overview}
-        </Overview>
-        <Controller
-          variants={controllerVariants}
-          initial="active"
-          animate={
-            !isReady || (isReady && isMouseMoving) ? "active" : "inactive"
-          }
-        >
-          {!isReady ? (
+        <Overview>{movie.overview}</Overview>
+        <Controller>
+          {
             <ControlButton
               whileHover={{
                 backgroundColor: "#b1b1b1",
@@ -406,16 +367,7 @@ const BannerPlayer: React.FC<{
             >
               <PlayIcon iconwidth="21px" /> Play
             </ControlButton>
-          ) : (
-            <ControlButton
-              whileHover={{
-                backgroundColor: "#b1b1b1",
-              }}
-              onClick={stopPlayer}
-            >
-              <StopIcon iconwidth="21px" /> Stop
-            </ControlButton>
-          )}
+          }
           <InformationButton
             whileHover={{
               backgroundColor: "#393939",
@@ -428,11 +380,7 @@ const BannerPlayer: React.FC<{
           </InformationButton>
         </Controller>
       </DescriptionLayer>
-      <NowPlaying
-        onClick={onClickNowPlaying}
-        onMouseLeave={onMouseLeaveFromNowPlaying}
-        style={{ display: isReady ? "none" : "block" }}
-      >
+      <NowPlaying>
         <SliedeTitle $leftCommonPadding={leftCommonPadding}>
           Now Playing
         </SliedeTitle>
