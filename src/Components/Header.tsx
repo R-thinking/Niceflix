@@ -18,6 +18,7 @@ import PencilIcon from "../asets/PencilIcon";
 import SmileIcon from "../asets/SmileIcon";
 import AccountIcon from "../asets/AccountIcon";
 import QuestionMarkIcon from "../asets/QuestionMarkIcon";
+import NotificationModal from "./NotificationModal";
 
 const Navigation = styled(motion.nav)<{ $leftCommonPadding: number }>`
   display: flex;
@@ -64,8 +65,9 @@ const PersonalMenu = styled.div`
   gap: 15px;
 `;
 
-const NoticeBox = styled.div`
+const Notification = styled.div`
   cursor: pointer;
+  position: relative;
 `;
 const ProfileMenu = styled.div`
   position: relative;
@@ -98,11 +100,28 @@ const Header = () => {
     }
   });
 
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const toggleNotification = () => setIsNotificationOpen((state) => !state);
+
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const toggleDropDown = () => setIsDropDownOpen((state) => !state);
-  const onclickProfileMenu = (event: React.MouseEvent) => {
-    toggleDropDown();
+
+  const clearAllModal = () => {
+    setIsNotificationOpen(false);
+    setIsDropDownOpen(false);
   };
+
+  const onClickNotification = () => {
+    const prevState = isNotificationOpen;
+    clearAllModal();
+    setIsNotificationOpen(!prevState);
+  };
+  const onclickProfileMenu = () => {
+    const prevState = isDropDownOpen;
+    clearAllModal();
+    setIsDropDownOpen(!prevState);
+  };
+
   const setSignOut = userStore((state) => state.setSignOut);
 
   return (
@@ -135,12 +154,29 @@ const Header = () => {
         </Items>
       </Column>
       <PersonalMenu>
-        <div onClick={() => setIsDropDownOpen(false)}>
+        <div onClick={clearAllModal}>
           <SearchBox />
         </div>
-        <NoticeBox onClick={() => setIsDropDownOpen(false)}>
-          <BellIcon $iconWidth="20px" />
-        </NoticeBox>
+        <Notification>
+          <div onClick={onClickNotification}>
+            <BellIcon $iconWidth="20px" />
+          </div>
+          {isNotificationOpen && (
+            <NotificationModal
+              toggleDisplay={toggleNotification}
+              notices={[
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+                { description: "Test Notice" },
+              ]}
+            />
+          )}
+        </Notification>
         <ProfileMenu>
           <ProfileContent onClick={onclickProfileMenu}>
             <AvatarIcon1 $iconWidth="32px" />

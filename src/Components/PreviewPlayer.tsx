@@ -392,7 +392,7 @@ const PreviewPlayer = () => {
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const playLoop = async (player: IYoutubePlayer, duration: number) => {
     setTimeout(async () => {
-      await player.seekTo(0);
+      await player?.seekTo(0);
       await playLoop(player, duration);
     }, duration * 1000 - 1000);
   };

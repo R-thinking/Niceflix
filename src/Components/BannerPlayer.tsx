@@ -223,8 +223,8 @@ const BannerPlayer: React.FC<{
       }
       const player = youtubeRef?.current?.getInternalPlayer();
       if (player && (await player.isMuted())) await player.unMute();
-      await player.seekTo(startTime);
-      await player.playVideo();
+      await player?.seekTo(startTime);
+      await player?.playVideo();
 
       setTimeout(() => {
         setIsReady(true);
@@ -294,8 +294,8 @@ const BannerPlayer: React.FC<{
           )
         );
       }
-      await player.seekTo(startTime);
-      await player.playVideo();
+      await player?.seekTo(startTime);
+      await player?.playVideo();
       setTimeout(async () => {
         await player.unMute();
         setIsReady(true);

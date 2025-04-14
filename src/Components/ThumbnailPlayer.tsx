@@ -242,7 +242,7 @@ const ThumbnailPlayer = ({
   const playLoop = async (player: IYoutubePlayer, duration: number) => {
     setLoopTimer(
       setTimeout(async () => {
-        await player.seekTo(0);
+        await player?.seekTo(0);
         await playLoop(player, duration);
       }, duration * 1000 - 1000)
     );
