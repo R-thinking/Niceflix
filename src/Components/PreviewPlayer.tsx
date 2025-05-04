@@ -465,27 +465,29 @@ const PreviewPlayer = () => {
                 $activePlayer={activePlayer}
                 $backdropPath={images.backdropImage}
               >
-                <Player
-                  variants={playerVariants}
-                  initial="inactive"
-                  animate={isPlayingVideo ? "active" : "inactive"}
-                >
-                  {trailer && movieSectionRef.current && (
-                    <YouTube
-                      ref={youtubeRef}
-                      videoId={trailer.results[0].key}
-                      opts={{
-                        width: "100%",
-                        playerVars: {
-                          controls: 0, //disable control of users
-                          disablekb: 0, //disable keyboard
-                          rel: 0, // hide recomended videos
-                        },
-                      }}
-                      onReady={onReadyPlayer}
-                    />
-                  )}
-                </Player>
+                {trailer && trailer.results[0]?.key && (
+                  <Player
+                    variants={playerVariants}
+                    initial="inactive"
+                    animate={isPlayingVideo ? "active" : "inactive"}
+                  >
+                    {movieSectionRef.current && (
+                      <YouTube
+                        ref={youtubeRef}
+                        videoId={trailer.results[0].key}
+                        opts={{
+                          width: "100%",
+                          playerVars: {
+                            controls: 0, //disable control of users
+                            disablekb: 0, //disable keyboard
+                            rel: 0, // hide recomended videos
+                          },
+                        }}
+                        onReady={onReadyPlayer}
+                      />
+                    )}
+                  </Player>
+                )}
                 <GradientLayer />
                 <CloseButton
                   onClick={closePlayer}

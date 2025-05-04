@@ -72,8 +72,8 @@ const DropdownMenu: React.FC<{
         <UpArrowFilledIcon $iconWidth="16px" />
       </Indicator>
       <MenuContainer>
-        {menus.map((menu) => (
-          <Menu $width={menu.width} $height={menu.height}>
+        {menus.map((menu, menuIndex) => (
+          <Menu $width={menu.width} $height={menu.height} key={menuIndex}>
             {menu.icon}
             <TextButton
               onClick={() => {
@@ -88,11 +88,12 @@ const DropdownMenu: React.FC<{
       </MenuContainer>
       <Footer>
         {footers
-          ? footers.map((footer) => (
+          ? footers.map((footer, footerIndex) => (
               <Menu
                 $width={footer.width}
                 $height={footer.height}
                 style={{ justifyContent: "center" }}
+                key={footerIndex}
               >
                 {footer.icon}
                 <TextButton

@@ -424,28 +424,31 @@ const ThumbnailPlayer = ({
 
         {activePlayer && (
           <>
-            <Player
-              variants={playerVariants}
-              initial="inactive"
-              animate={isPlayingVideo ? "active" : "inactive"}
-            >
-              {trailerData && (
-                <YouTube
-                  ref={youtubeRef}
-                  videoId={trailerData.results[0].key}
-                  opts={{
-                    width: "100%",
-                    height: itemHeight,
-                    playerVars: {
-                      controls: 0, //disable control of users
-                      disablekb: 0, //disable keyboard
-                      rel: 0, // hide recomended videos
-                    },
-                  }}
-                  onReady={onReadyPlayer}
-                />
-              )}
-            </Player>
+            {trailerData && trailerData.results[0]?.key && (
+              <Player
+                variants={playerVariants}
+                initial="inactive"
+                animate={isPlayingVideo ? "active" : "inactive"}
+              >
+                {trailerData && (
+                  <YouTube
+                    ref={youtubeRef}
+                    videoId={trailerData.results[0].key}
+                    opts={{
+                      width: "100%",
+                      height: itemHeight,
+                      playerVars: {
+                        controls: 0, //disable control of users
+                        disablekb: 0, //disable keyboard
+                        rel: 0, // hide recomended videos
+                      },
+                    }}
+                    onReady={onReadyPlayer}
+                  />
+                )}
+              </Player>
+            )}
+
             <Controller
               variants={controllerVariants}
               initial="inactive"

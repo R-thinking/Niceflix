@@ -19,22 +19,22 @@ const SmileIcon: React.FC<{ $iconWidth: string }> = ({ $iconWidth }) => {
         height="20"
         rx="3"
         stroke="#B3B3B3"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <rect x="16" y="23.5" width="3" height="2" fill="#141414" />
       <path
         d="M11.9996 28.5L16.3633 24.5L11.9996 20.5"
         stroke="#B3B3B3"
-        stroke-width="1.5"
-        stroke-linecap="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
       <rect x="10" y="10" width="3" height="3" rx="1.5" fill="#B3B3B3" />
       <rect x="19" y="10" width="3" height="3" rx="1.5" fill="#B3B3B3" />
       <path
         d="M14 17C14 17 16.1193 17.5 17.5 17.5C18.8807 17.5 21 17 21 17"
         stroke="#B3B3B3"
-        stroke-width="1.5"
-        stroke-linecap="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
     </Svg>
   );
